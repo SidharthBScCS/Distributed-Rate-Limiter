@@ -83,17 +83,17 @@ The workflow of the **Distributed Rate Limiter System** is simple, efficient, an
 This workflow ensures **system stability**, **fair usage**, and **high performance** without introducing significant latency.
 
 ## SCOPE OF THE PROJECT
-**The project covers:**
+- **The project covers:**
 - Distributed rate limiting algorithms
 - Centralized rule configuration
 - Live monitoring dashboard
 - API-based integration
 - Logging and analytics
-**Areas not covered:**
+- **Areas not covered:**
 - Full authentication system
 - Payment or subscription management
 - AI-based anomaly detection (future extension)
-**TECHNOLOGY STACK**
+- **TECHNOLOGY STACK**
 - Java 17 / Spring Boot
 - Redis for distributed counters
 - PostgreSQL for configurations
