@@ -24,3 +24,43 @@ Here are the major problems the system addresses:
  High API usage increases cloud billing unexpectedly.
 - Distributed System Complexity
  When apps run on multiple servers, enforcing consistent rate limits becomes difficult.
+
+## OBJECTIVES
+The key goals of our system are:
+- To build a fast and reliable rate limiting engine.
+- To support multiple strategies like Token Bucket, Sliding Window, and Fixed Window.
+- To offer an admin dashboard with real-time monitoring.
+- To ensure consistent rate limits across distributed servers.
+- To make configuration easy for developers and organizations.
+
+## WORKFLOW OF THE SYSTEM
+The workflow of the Distributed Rate Limiter System is simple, smooth, and close to how
+modern API gateways work:
+- Incoming Request : A user sends a request to an application (e.g., login, fetch items, etc.).
+- Application Calls Rate Limiter : Before processing the request, the main application sends the user’s key/IP to our Rate Limiter Service through an API call.
+- Check Rate Limits (Core Logic) The Rate Limiter checks:
+       - How many requests the user has already made.
+       - Whether the user exceeds the limit.
+       - What algorithm is applied (Token Bucket, Sliding Window, etc.).
+- Redis-Based Decision : Since this is a Distributed system, Redis stores counters/tokens centrally:
+       - Redis increments counters
+       - Redis checks expiration
+       - Redis ensures correct limits across all servers
+- Allow or Deny Based on Redis results:
+       - If within limit → system returns **ALLOW**
+       - If exceeded → system returns **DENY**
+- Application Processes or Blocks : 
+       - If allowed → request reaches the main service (like ordering food or viewing items).
+       - If denied → user gets a "Too Many Requests" message.
+- Logging and Analytics Every decision is logged for:
+       - Monitoring
+       - Charts
+       - Alerts
+       - Usage reports
+- Dashboard Display Admins can view:
+       - Live traffic
+       - Violations
+       - High-load endpoints
+       - API keys
+       - Custom limit configurations
+This workflow ensures system stability without slowing down applications.
