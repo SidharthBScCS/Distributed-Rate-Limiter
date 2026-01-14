@@ -1,102 +1,142 @@
-# Distributed-Rate-Limiter
+# Distributed Rate Limiter
 
-## INTRODUCTION
-In today’s digital world, almost every service we use—shopping apps, banking, streaming,
-travel, or even simple login systems—relies on APIs. These APIs sometimes receive
-unpredictable traffic. For example, during a sale, thousands of users may hit an endpoint at
-the same moment. If the system cannot handle this load, it may crash.
-To prevent such sudden overload or misuse, the industry uses a mechanism called Rate
-Limiting. It decides how many requests are allowed within a specific time. Our project, the
-Distributed Rate Limiter System, acts as a smart traffic controller that ensures APIs remain
-fast, secure, and fair for everyone.
-This system is designed to reduce server crashes, protect against abuse, and ensure stable
-performance—even when millions of users are accessing the app.
+A scalable and distributed rate limiting system designed to protect APIs from overload, abuse, and unfair usage while ensuring consistent performance across multiple servers.
 
-## PROBLEM STATEMENT
-Here are the major problems the system addresses:
-- **API Overload**
- Too many requests at once slow down servers or cause downtime.
-- **Misuse or Attacks**
- Bots or malicious users may spam APIs, leading to failures.
-- **Unfair Usage**
- Some users may overuse free plans unless limits are enforced.
-- **Cost Increase**
- High API usage increases cloud billing unexpectedly.
-- **Distributed System Complexity**
- When apps run on multiple servers, enforcing consistent rate limits becomes difficult.
+---
 
-## OBJECTIVES
-The key goals of our system are:
-- To build a fast and reliable rate limiting engine.
-- To support multiple strategies like Token Bucket, Sliding Window, and Fixed Window.
-- To offer an admin dashboard with real-time monitoring.
-- To ensure consistent rate limits across distributed servers.
-- To make configuration easy for developers and organizations.
+## Introduction
 
-## WORKFLOW OF THE SYSTEM
+In today’s digital world, almost every service we use—shopping platforms, banking apps, streaming services, travel portals, or even simple login systems—relies heavily on APIs. These APIs often experience unpredictable traffic patterns. For example, during flash sales or peak hours, thousands of users may hit the same endpoint simultaneously.
 
-The workflow of the **Distributed Rate Limiter System** is simple, efficient, and closely aligned with how modern API gateways operate.
+If a system is not prepared to handle such traffic spikes, it can lead to performance degradation or complete downtime.
+
+To prevent this, modern systems use **Rate Limiting**—a mechanism that controls how many requests a client can make within a specific time window.  
+The **Distributed Rate Limiter System** acts as a smart traffic controller that ensures APIs remain **fast, secure, and fair**, even under heavy load.
+
+This system is designed to:
+- Prevent server crashes  
+- Protect against misuse and abuse  
+- Maintain stable performance in high-traffic environments  
+
+---
+
+## Problem Statement
+
+The system addresses the following challenges:
+
+- **API Overload**  
+  Excessive concurrent requests can slow down servers or cause downtime.
+
+- **Misuse or Attacks**  
+  Bots or malicious clients may spam APIs, leading to service disruption.
+
+- **Unfair Usage**  
+  Without limits, some users may consume disproportionate resources.
+
+- **Cost Increase**  
+  High API usage can unexpectedly increase cloud infrastructure costs.
+
+- **Distributed System Complexity**  
+  Enforcing consistent rate limits across multiple servers is difficult without a centralized mechanism.
+
+---
+
+##  Objectives
+
+The key objectives of this project are:
+
+- Build a fast and reliable rate limiting engine  
+- Support multiple rate limiting strategies:
+  - Token Bucket  
+  - Sliding Window  
+  - Fixed Window  
+- Ensure consistent rate limits across distributed servers  
+- Provide an admin dashboard for real-time monitoring  
+- Make configuration simple and developer-friendly  
+
+---
+
+## Workflow of the System
+
+The **Distributed Rate Limiter System** follows a workflow similar to modern API gateways.
 
 - **Incoming Request**  
-  A client sends a request to an application (e.g., login, fetch items, place an order).
+  A client sends a request to an application (e.g., login, fetch data, place an order).
 
 - **Application Calls Rate Limiter**  
-  Before processing the request, the main application sends the client’s **API key / IP address** to the Rate Limiter Service via an internal API call.
+  Before processing the request, the application sends the client’s **API key / IP address** to the Rate Limiter Service.
 
 - **Check Rate Limits (Core Logic)**  
-  The Rate Limiter evaluates the request by checking:
+  The Rate Limiter evaluates:
   - Number of requests already made by the client  
-  - Whether the request exceeds the configured limit  
-  - Which rate limiting algorithm is applied  
+  - Whether the configured limit is exceeded  
+  - Which algorithm is applied  
     *(Token Bucket, Sliding Window, Fixed Window, etc.)*
 
 - **Redis-Based Decision**  
-  Since the system is distributed, Redis is used as a centralized store to maintain consistency:
-  - Redis increments counters or tokens atomically  
-  - Redis manages key expiration using TTL  
-  - Redis ensures consistent limits across all servers  
+  Redis is used as a centralized store to maintain consistency:
+  - Atomic counter/token updates  
+  - Key expiration using TTL  
+  - Shared state across distributed servers  
 
 - **Allow or Deny Decision**  
-  Based on the Redis evaluation:
-  - **ALLOW** → Request is within the allowed limit  
+  - **ALLOW** → Request is within the limit  
   - **DENY** → Rate limit exceeded  
 
 - **Application Processes or Blocks Request**  
-  - If allowed → Request is forwarded to the main service  
-  - If denied → Client receives `HTTP 429 (Too Many Requests)`  
+  - Allowed → Request reaches the main service  
+  - Denied → Client receives `HTTP 429 (Too Many Requests)`  
 
 - **Logging and Analytics**  
-  Every decision is logged for:
-  - Monitoring and metrics  
+  Every request decision is logged for:
+  - Monitoring  
   - Traffic analysis  
   - Alerts  
   - Usage reports  
 
 - **Dashboard Display**  
-  Administrators can monitor:
-  - Live request traffic  
+  Administrators can view:
+  - Live traffic  
   - Rate limit violations  
   - High-load endpoints  
   - API key / IP usage  
   - Configured rate limit rules  
 
-This workflow ensures **system stability**, **fair usage**, and **high performance** without introducing significant latency.
+This workflow ensures **system stability**, **fair usage**, and **high performance** with minimal latency.
 
-## SCOPE OF THE PROJECT
-- **The project covers:**
-- Distributed rate limiting algorithms
-- Centralized rule configuration
-- Live monitoring dashboard
-- API-based integration
-- Logging and analytics
-- **Areas not covered:**
-- Full authentication system
-- Payment or subscription management
-- AI-based anomaly detection (future extension)
-- **TECHNOLOGY STACK**
-- Java 17 / Spring Boot
-- Redis for distributed counters
-- PostgreSQL for configurations
-- HTML/CSS/JS + Thymeleaf for dashboard
-- Docker for deployment
-- Prometheus + Grafana for monitoring 
+---
+
+## Scope of the Project
+
+### Covered
+- Distributed rate limiting algorithms  
+- Centralized rule configuration  
+- Admin monitoring dashboard  
+- API-based integration  
+- Logging and analytics  
+
+### Not Covered
+- Full authentication system  
+- Payment or subscription management  
+- AI-based anomaly detection *(future extension)*  
+
+---
+
+## Technology Stack
+
+- **Backend:** Java 17, Spring Boot  
+- **Distributed Store:** Redis  
+- **Configuration Storage:** PostgreSQL  
+- **Frontend:** HTML, CSS, JavaScript, Thymeleaf  
+- **Deployment:** Docker  
+- **Monitoring:** Prometheus, Grafana  
+
+---
+
+## Conclusion
+
+The **Distributed Rate Limiter System** is a modern, production-oriented solution built for today’s high-traffic applications. It effectively protects APIs from overload, enforces fair usage, and ensures consistent performance across distributed environments.
+
+With its clean architecture, Redis-backed consistency, and monitoring dashboard, this project demonstrates strong **backend engineering** and **distributed systems** fundamentals—making it not just an academic project, but an industry-relevant solution.
+
+---
