@@ -34,33 +34,50 @@ The key goals of our system are:
 - To make configuration easy for developers and organizations.
 
 ## WORKFLOW OF THE SYSTEM
-The workflow of the Distributed Rate Limiter System is simple, smooth, and close to how
-modern API gateways work:
-- Incoming Request : A user sends a request to an application (e.g., login, fetch items, etc.).
-- Application Calls Rate Limiter : Before processing the request, the main application sends the user’s key/IP to our Rate Limiter Service through an API call.
-- Check Rate Limits (Core Logic) The Rate Limiter checks:
-       - How many requests the user has already made.
-       - Whether the user exceeds the limit.
-       - What algorithm is applied (Token Bucket, Sliding Window, etc.).
-- Redis-Based Decision : Since this is a Distributed system, Redis stores counters/tokens centrally:
-       - Redis increments counters
-       - Redis checks expiration
-       - Redis ensures correct limits across all servers
-- Allow or Deny Based on Redis results:
-       - If within limit → system returns **ALLOW**
-       - If exceeded → system returns **DENY**
-- Application Processes or Blocks : 
-       - If allowed → request reaches the main service (like ordering food or viewing items).
-       - If denied → user gets a "Too Many Requests" message.
-- Logging and Analytics Every decision is logged for:
-       - Monitoring
-       - Charts
-       - Alerts
-       - Usage reports
-- Dashboard Display Admins can view:
-       - Live traffic
-       - Violations
-       - High-load endpoints
-       - API keys
-       - Custom limit configurations
-This workflow ensures system stability without slowing down applications.
+
+The workflow of the **Distributed Rate Limiter System** is simple, efficient, and closely aligned with how modern API gateways operate.
+
+- **Incoming Request**  
+  A client sends a request to an application (e.g., login, fetch items, place an order).
+
+- **Application Calls Rate Limiter**  
+  Before processing the request, the main application sends the client’s **API key / IP address** to the Rate Limiter Service via an internal API call.
+
+- **Check Rate Limits (Core Logic)**  
+  The Rate Limiter evaluates the request by checking:
+  - Number of requests already made by the client  
+  - Whether the request exceeds the configured limit  
+  - Which rate limiting algorithm is applied  
+    *(Token Bucket, Sliding Window, Fixed Window, etc.)*
+
+- **Redis-Based Decision**  
+  Since the system is distributed, Redis is used as a centralized store to maintain consistency:
+  - Redis increments counters or tokens atomically  
+  - Redis manages key expiration using TTL  
+  - Redis ensures consistent limits across all servers  
+
+- **Allow or Deny Decision**  
+  Based on the Redis evaluation:
+  - **ALLOW** → Request is within the allowed limit  
+  - **DENY** → Rate limit exceeded  
+
+- **Application Processes or Blocks Request**  
+  - If allowed → Request is forwarded to the main service  
+  - If denied → Client receives `HTTP 429 (Too Many Requests)`  
+
+- **Logging and Analytics**  
+  Every decision is logged for:
+  - Monitoring and metrics  
+  - Traffic analysis  
+  - Alerts  
+  - Usage reports  
+
+- **Dashboard Display**  
+  Administrators can monitor:
+  - Live request traffic  
+  - Rate limit violations  
+  - High-load endpoints  
+  - API key / IP usage  
+  - Configured rate limit rules  
+
+This workflow ensures **system stability**, **fair usage**, and **high performance** without introducing significant latency.
