@@ -14,15 +14,15 @@ performance—even when millions of users are accessing the app.
 
 ## PROBLEM STATEMENT
 Here are the major problems the system addresses:
-- API Overload
+- **API Overload**
  Too many requests at once slow down servers or cause downtime.
-- Misuse or Attacks
+- **Misuse or Attacks**
  Bots or malicious users may spam APIs, leading to failures.
-- Unfair Usage
+- **Unfair Usage**
  Some users may overuse free plans unless limits are enforced.
-- Cost Increase
+- **Cost Increase**
  High API usage increases cloud billing unexpectedly.
-- Distributed System Complexity
+- **Distributed System Complexity**
  When apps run on multiple servers, enforcing consistent rate limits becomes difficult.
 
 ## OBJECTIVES
@@ -81,3 +81,22 @@ The workflow of the **Distributed Rate Limiter System** is simple, efficient, an
   - Configured rate limit rules  
 
 This workflow ensures **system stability**, **fair usage**, and **high performance** without introducing significant latency.
+
+## SCOPE OF THE PROJECT
+**The project covers:**
+- Distributed rate limiting algorithms
+- Centralized rule configuration
+- Live monitoring dashboard
+- API-based integration
+- Logging and analytics
+**Areas not covered:**
+- Full authentication system
+- Payment or subscription management
+- AI-based anomaly detection (future extension)
+**TECHNOLOGY STACK**
+- Java 17 / Spring Boot
+- Redis for distributed counters
+- PostgreSQL for configurations
+- HTML/CSS/JS + Thymeleaf for dashboard
+- Docker for deployment
+- Prometheus + Grafana for monitoring 
